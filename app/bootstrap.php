@@ -17,7 +17,6 @@ $webloaderExtension = new \WebLoader\Nette\Extension();
 $webloaderExtension->install($configurator);
 
 $configurator->addConfig(__DIR__ . '/config/config.neon', FALSE);
-$configurator->addConfig(__DIR__ . '/config/config.local.neon', FALSE);
 $container = $configurator->createContainer();
 
 $container->application->errorPresenter = 'Error';

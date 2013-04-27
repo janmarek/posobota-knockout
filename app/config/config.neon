@@ -9,14 +9,8 @@ php:
 nette:
   session:
     autoStart: smart
-  database:
-    default:
-      dsn: '%database.driver%:host=%database.host%;dbname=%database.dbname%'
-      user: %database.user%
-      password: %database.password%
 
 services:
-  database: @Nette\Database\Connection
   router: RouterFactory::createRouter
 
   wlLessFilter: WebLoader\Filter\LessFilter
