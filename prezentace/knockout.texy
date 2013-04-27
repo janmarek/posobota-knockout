@@ -1,0 +1,241 @@
+Knockout
+########
+
+Jan Marek
+
+"@HonzaMarek":https://twitter.com/HonzaMarek
+
+Anketa
+######
+
+- Kolik lidí používá jQuery?
+
+Anketa
+######
+
+- Kolik lidí používá jQuery?
+- Kolik lidí používá nějaký MVC framework v JS?
+
+Knockout
+########
+
+- view model + šablona
+- view modelem je obyčejný JS objekt
+
+/--code html
+<div id="todolist">
+<table data-bind="foreach: items">
+	<tr>
+		<td><input type="checkbox" data-bind="checked: done"></td>
+		<td><span data-bind="text: text, css: { done: done }"></span></td>
+	</tr>
+</table>
+</div>
+
+<script>
+var todoListViewModel = {
+	items: [
+		{text: 'koupit pivo', done: true},
+		{text: 'uklidit', done: false}
+	]
+};
+ko.applyBindings(todoListViewModel, document.getElementById('todolist'));
+</script>
+\--
+
+Two-way databinding
+###################
+
+/--code html .[example]
+<div id="databinding-demo">
+<input type="text" data-bind="value: name" placeholder="Zadejte text">
+hodnota: <span data-bind="text: name"></span>
+</div>
+
+<script>
+// definice modelu
+var databindingDemoModel = {
+    name: ko.observable()
+};
+
+// spuštení knockoutu
+ko.applyBindings(databindingDemoModel, document.getElementById('databinding-demo'));
+</script>
+\--
+
+Observable
+##########
+
+/--code js
+// Vytvoření ko.observable
+var observable = ko.observable();
+var observable2 = ko.observable('default'); // s výchozí hodnotou
+
+// Nastavení hodnoty
+observable('new value');
+
+// Přečtení hodnoty
+var value = observable();
+
+// Pokud nevíme, jestli se jedná o observable nebo běžnou proměnnou
+var value = ko.utils.unwrapObservable(observable);
+\--
+
+Computed
+########
+
+/--code html .[example]
+<div id="computed">
+jméno: <input data-bind="value: name"></span>
+příjmení: <input data-bind="value: surname"></span>
+celé jméno: <span data-bind="text: fullname"></span>
+</div>
+
+<script>
+function ComputedModel() {
+    this.name = ko.observable('');
+    this.surname = ko.observable('');
+    this.fullname = ko.computed(function () {
+        return this.name() + ' ' + this.surname();
+    }, this);
+};
+
+ko.applyBindings(new ComputedModel(), document.getElementById('computed'));
+</script>
+\--
+
+Akce
+####
+
+- metoda na view modelu
+
+
+/--code html .[example]
+<div id="action">
+text: <input data-bind="value: name"></span> <a data-bind="click: changeName">změnit</a>
+</div>
+
+<script>
+function ActionModel() {
+    this.name = ko.observable('lorem');
+
+    this.changeName = function () {
+        return this.name('ipsum');
+    };
+};
+
+ko.applyBindings(new ActionModel(), document.getElementById('action'));
+</script>
+\--
+
+Testování
+#########
+
+- "Jasmine":http://pivotal.github.io/jasmine/
+- testujeme jen logiku, ne vykreslování
+
+/--code js
+describe('Todo', function () {
+	var list;
+	beforeEach(function () {
+		list = new TodoList([
+			{text: 'koupit pivo', done: true},
+			{text: 'uklidit', done: false}
+		]);
+	});
+
+	it('loads data from constructor', function () {
+		expect(list.items().length).toBe(2);
+	});
+
+	it('knows count of not done items', function () {
+		expect(list.notDoneItemsCount()).toBe(1);
+	});
+
+	describe('adding item', function () {
+		it('adds new item', function () {
+			list.newItemText('zavolat mamince');
+			list.addItem();
+			expect(list.items().length).toBe(3);
+			expect(list.newItemText()).toBe('');
+		});
+
+		it('adds item which is not done initially', function () {
+			list.newItemText('zavolat mamince');
+			list.addItem();
+			var items = list.items();
+			var lastItem = items[items.length - 1];
+			expect(lastItem.done()).toBe(false);
+		});
+
+		it('does not add item if text is not filled', function () {
+			list.addItem();
+			expect(list.items().length).toBe(2);
+		});
+	});
+});
+\--
+
+Ajax
+####
+
+- obalující objekt, který lze snadno mockovat
+
+/--code js
+function AjaxService() {
+	this.run = function (method, url, params, success, failure) {
+		$.ajax(url, {
+			data: params,
+			type: method,
+			dataType: 'json',
+			success: success,
+			error: failure || null
+		});
+	}
+}
+\--
+
+Testování:
+
+/--code js
+describe('reload', function () {
+	it('sets new data after reload', function () {
+		ajaxService.run = function (method, url, params, success, failure) {
+			expect(list.reloading()).toBe(true);
+
+			success({
+				items: []
+			});
+		};
+
+		list.reload();
+		expect(list.reloading()).toBe(false);
+		expect(list.items().length).toBe(0);
+	});
+
+	it('shows alert on error', function () {
+		var alertCalled = false;
+		alert = function () {
+			alertCalled = true;
+		};
+		ajaxService.run = function (method, url, params, success, failure) {
+			failure();
+		};
+
+		list.reload();
+		expect(list.reloading()).toBe(false);
+		expect(alertCalled).toBe(true);
+	});
+});
+\--
+
+Informace
+#########
+
+- "knockoutjs.com":http://knockoutjs.com
+- "blog.janmarek.net":http://blog.janmarek.net
+
+Dotazy?
+######
+
+Děkuji za pozornost.

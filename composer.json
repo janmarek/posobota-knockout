@@ -1,0 +1,19 @@
+{
+	"config": {
+		"vendor-dir": "libs"
+	},
+	"name": "janmarek/ko-example",
+	"description": "Knockout example",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Jan Marek",
+			"email": "mail@janmarek.net"
+		}
+	],
+	"require": {
+		"nette/nette": "2.0.*",
+		"leafo/lessphp": "0.3.*",
+		"JanMarek/WebLoader": "2.1.*"
+	}
+}

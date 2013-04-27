@@ -1,0 +1,19 @@
+body {
+    margin: 0 1rem 1rem;
+	color: #333;
+	background-color: #fff;
+}
+
+body, input {font-size: 1.3rem; line-height: 1.5em; font-family: Candara, sans-serif;}
+
+h1, h2, h3, h4 {color: #2D70B9; text-align: center;}
+
+h1 {font-size: 160%; background: #2D70B9; color: white; border-bottom: 2px solid #CCC; padding: 0.5em 0; margin: 0 -1rem 1rem}
+h2 {font-size: 140%;}
+h3 {font-size: 120%;}
+h4 {font-size: 100%; text-align: left;}
+
+big, .big {font-size: 140%;}
+
+a {color: #2D70B9; text-decoration: underline; cursor: pointer;}
+a:hover {color: #D29E00}

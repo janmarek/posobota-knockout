@@ -1,0 +1,51 @@
+parameters:
+  siteTitle: "Knockout example"
+
+php:
+  date.timezone: Europe/Prague
+  # session.save_path: "%tempDir%/sessions"
+  # zlib.output_compression: yes
+
+nette:
+  session:
+    autoStart: smart
+  database:
+    default:
+      dsn: '%database.driver%:host=%database.host%;dbname=%database.dbname%'
+      user: %database.user%
+      password: %database.password%
+
+services:
+  database: @Nette\Database\Connection
+  router: RouterFactory::createRouter
+
+  wlLessFilter: WebLoader\Filter\LessFilter
+
+webloader:
+  css:
+    default:
+      files:
+        - style.less
+      fileFilters:
+        - @wlLessFilter
+    jasmine:
+      files:
+        - %wwwDir%/js/jasmine/jasmine.css
+  js:
+    default:
+      files:
+        - jquery.js
+        - knockout.js
+        - %appDir%/../libs/nette/nette/client-side/netteForms.js
+        - todo.js
+
+    jasmine:
+      files:
+        # test framework files
+        - jasmine/jasmine.js
+        - jasmine/jasmine-html.js
+
+        # test files
+        - todoTest.js
+
+factories:

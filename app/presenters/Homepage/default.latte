@@ -1,0 +1,34 @@
+{block content}
+
+<div id="todolist">
+<table data-bind="foreach: items">
+	<tr>
+		<td><input type="checkbox" data-bind="checked: done"></td>
+		<td><span data-bind="text: text, css: { done: done }"></span></td>
+		<td><a data-bind="click: $parent.removeItem">smazat</a></td>
+	</tr>
+</table>
+
+<p>
+	Počet položek:
+	<span data-bind="text: items().length"></span>
+	(nedokončených: <span data-bind="text: notDoneItemsCount"></span>)
+</p>
+
+<p>
+	Nová položka:<br>
+	<input type="text" size="40" data-bind="value: newItemText">
+	<input type="button" value="přidat" data-bind="click: addItem">
+</p>
+
+<p>
+	<input type="button" value="reload" data-bind="click: reload, visible: !reloading()">
+	<span data-bind="visible: reloading">Načítám...</span>
+</p>
+</div>
+
+
+<script>
+var todoListViewModel = new TodoList({$todos}, {link reload}, new AjaxService());
+ko.applyBindings(todoListViewModel, document.getElementById('todolist'));
+</script>
